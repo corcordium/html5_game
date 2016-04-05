@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+body,section,div{margin:0;padding:0;}
+body{font-family: "微软雅黑";}
+.shake{
+	animation:shake 1s;-webkit-animation:shake 1s;
+animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards;
+}
+section{width: 100%;height: 100%;position: relative;}
+.bgColor{background-color: #2d4081;}
+.bg_page1{width: 426px;height: 426px;background-color: #233264;border: 2px solid #223162; border-radius: 50%;
+position: absolute;left:50%;top:50%;margin-left: -213px;margin-top: -213px;box-shadow: 0px 0px 0px 113px #283972,0px 0px 0px 115px #26376d,
+0px 0px 0px 193px #2a3d79,0px 0px 0px 195px #2a3d79,0px 0px 0px 253px #2c3f7e,0px 0px 0px 255px #2b3d7b;}
+.bg_start{width: 100%;height: 100%;background: url(../img/bg_start.png) no-repeat; background-size:cover;position: absolute;}
+.bg_game{width: 100%;height: 100%;background: url(../img/bg_game.png) no-repeat; background-size:cover;position: absolute;}
+.main_page1{width: 426px;height: 426px;position: absolute;left:50%;top:50%;margin-left: -213px;margin-top: -213px;}
+.main_page1 .rocket{width: 175px;height:194px; background: url(../img/rocket.png) no-repeat;position: absolute;left:46px;top:-31px;opacity: 0;
+}
+.main_page1 .thank{width: 399px;height: 297px;background: url(../img/thank.png) no-repeat;position: absolute;left:36px;top:43px;opacity: 0;
+}
+.arrow{width: 92px;height: 65px;background: url(../img/sorrow.png) no-repeat;position: absolute;left:50%;margin-left: -46px;bottom:40px;
+animation:arrow 1s infinite;-webkit-animation:arrow 1s infinite;}
+
+
+section.sectionIn .main_page1 .rocket{animation:rocket 1s;-webkit-animation:rocket 1s;opacity: 1;}
+section.sectionIn .main_page1 .thank{animation:thank 1s 1s;-webkit-animation:thank 1s 1s;
+animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards;}
+
+section.sectionOut .bg_page1{animation:circleOut 1s;-webkit-animation:circleOut 1s;opacity: 1;
+animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards;}
+section.sectionOut .bg_start{animation:starOut 1s;-webkit-animation:starOut 1s;opacity: 1;
+animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards;}
+section.sectionOut .main_page1 .rocket{animation:rocketOut 1s;-webkit-animation:rocketOut 1s;opacity: 1;
+animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards;}
+section.sectionOut .main_page1 .thank{animation:thankOut 1s 0.3s;-webkit-animation:thankOut 1s 0.3s;opacity: 1;
+animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards;}
+
+.music{width:50px;height: 47px;position: absolute;bottom:10px;right:10px;}
+.musicRun{background: url(../img/run.png) no-repeat;animation:run 3s infinite;-webkit-animation:run 3s infinite;animation-timing-function:linear;
+-webkit-animation-timing-function:linear;}
+.musicStop{background: url(../img/runstop.png) no-repeat;}
+
+.typeBar{width: 100%;height: 73px;background: rgba(0,0,0,0.4);position: absolute;bottom:0;z-index:9;}
+.typeBar .score{width: 263px;height: 100%;float: left;background: url(../img/moster4.png) no-repeat 22px 18px;background-size: 60px 52px;
+line-height:73px;font-size: 30px;color:#55b9f8;text-indent: 88px;}
+.typeBar .time{width: 180px;height: 100%;float: left;background: url(../img/clock.png) no-repeat 0px 16px;background-size: 39px 45px;
+line-height:73px;font-size: 30px;color:#ffe400;text-indent: 57px;}

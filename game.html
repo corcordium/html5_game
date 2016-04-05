@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=640,user-scalable=no,target-densityDpi=device-dpi">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/index.css">
+	<link rel="stylesheet" href="css/animation.css">
+	<script src="js/lex.js"></script>
+</head>
+<body class="bgColor">
+	<script>
+		window.onload = function(){
+			document.body.style.height = view().h + "px";
+		}
+	</script>
+	<div class="bg_page1"></div>
+	<div class="bg_start"></div>
+
+	<canvas id="game" style="position:absolute;z-index:3"></canvas>
+
+	<div class="typeBar">
+		<div class="score" id="score"></div>
+		<div class="time" id = "time"></div>
+		<div class="music musicRun" id="music">
+			<audio src="audio/earth.mp3" preload = "auto" loop = "loop" ></audio>
+		</div>
+	</div>
+	<script src="js/jCanvaScript.1.5.18.min.js"></script>
+	<script>
+		bind(document, 'touchstart', function () {
+			console.log('start');
+		});
+		bind(document, 'touchend', function () {
+			console.log('end');
+		});
+		musicShow();
+		function musicShow(){
+			var mu = s('music');
+			var au = mu.getElementsByTagName('audio')[0];
+			bind(mu,'touchstart',function(){
+				if(au.paused){
+					au.play();
+					removeClass(mu,'musicStop');
+					addClass(mu,'musicRun');
+				}else{
+					au.pause();
+					removeClass(mu,'musicRun');
+					addClass(mu,'musicStop');
+				}
+			});
+			
+		}
+
+		function gamePage(){
+			s('game').width = view().w;
+			s('game').height = view().h;
+			var _this = this;
+			_this.monster = {
+				mon1:function(option){
+					var img=new Image();
+			        img.src="img/monster1.png";
+			        img.onload=function(){
+			        jc.start(option.canvas,true);
+			        jc.image(img,-100,-100,109,113).id(option.id).level(2);
+			        jc.start(option.canvas);}
+				},
+				mon2:function(option){
+					var img=new Image();
+			        img.src="img/monster2.png";
+			        img.onload=function(){
+			        jc.start(option.canvas,true);
+			        jc.image(img,-100,-100,109,112).id(option.id).level(2);
+			        jc.start(option.canvas);}
+				},
+				mon3:function(option){
+					var img=new Image();
+			        img.src="img/monster3.png";
+			        img.onload=function(){
+			        jc.start(option.canvas,true);
+			        jc.image(img,-100,-100,107,129).id(option.id).level(2);
+			        jc.start(option.canvas);}
+				},
+				mon4:function(option){
+					var img=new Image();
+			        img.src="img/moster4.png";
+			        img.onload=function(){
+			        jc.start(option.canvas,true);
+			        jc.image(img,-100,-100,125,110).id(option.id).level(2);
+			        jc.start(option.canvas);}
+				},
+				monDie:[[180,138],[146,83],[103,94],[92,107]]
+			};
+			_this.time = [10];
+			_this.arrNum = [];
+			var num = 1;
+			createNum();
+			function createNum () {
+				for(var i = 0;i < num;i++){
+					_this.arrNum.push(num);
+				}
+				num++;
+				if(num<30){
+					createNum();
+				}
+
+			};
+			_this.passNum = 0;
+			_this.minX = 50;
+			_this.minY = 50;
+			_this.maxX = view().w - 160;
+			_this.maxY = view().h - 160;
+			_this.roundT = 10000;
+			_this.speed = 30;
+			_this.monM = {};
+			_this.position = {};
+			_this.score = 0;
+			s('score').innerHTML = 'X' + _this.score;
+
+			function monMove(option){
+				var _that = this;
+				_that.obj = option.obj;
+				_that.R = option.R;
+				_that.Ang = 300;
+				_that.angChange = option.angChange;
+				_that.roundNum = ((_this.maxX - _this.minX) + (_this.maxY - _this.minY)) * 2 /(_this.roundT / _this.speed);
+				var firstPositionArea = random({min:1,max:4});
+				switch(firstPositionArea){
+					case 1 : 
+						_that.X = random({min:_this.minX,max:_this.maxX});
+						_that.Y = _this.minY;break;
+					case 2:
+						_that.X = _this.minX;
+						_that.Y = random({min:_this.minY,max:_this.maxY});break;
+					case 3:
+						_that.X = random({min:_this.minX,max:_this.maxX});
+						_that.Y = _this.maxY;break;
+					case 4:
+						_that.X = _this.maxX;
+						_that.Y = random({min:_this.minY,max:_this.maxY});break;
+				};
+				_that.timer = setInterval(function(){
+					_that.run();
+				}, _this.speed);
+				
+			};
+
+			monMove.prototype.run = function(){
+				var _that = this;
+				_that.Ang = _that.Ang + _that.angChange;
+				if(_that.X <= _this.maxX && _that.X > _this.minX && _that.Y == _this.minY){
+					_that.X = _that.X - _that.roundNum;
+					if(_that.X < _this.minX){
+						_that.X = _this.minX;
+					};
+				}else if(_that.X == _this.minX && _that.Y < _this.maxY){
+					_that.Y = _that.Y + _that.roundNum;
+					if(_that.Y > _this.maxY){_that.Y = _this.maxY;};
+				}else if(_that.Y == _this.maxY && _that.X < _this.maxX){
+					_that.X = _that.X + _that.roundNum;
+					if(_that.X > _this.maxX){
+						_that.X = _this.maxX;
+					};
+				}else if(_that.X == _this.maxX && _that.Y <= _this.maxY){
+					_that.Y = _that.Y - _that.roundNum;
+					if(_that.Y < _this.minY){_that.Y = _this.minY;};
+				};
+				_that.x = _that.X - _that.R * Math.cos(_that.Ang * Math.PI/180);
+				_that.y = _that.Y - _that.R * Math.sin(_that.Ang * Math.PI/180);
+				jc('#' + _that.obj).animate({x:_that.x,y:_that.y},1);
+				_this.position[_that.obj] = [];
+				_this.position[_that.obj][0] = _that.x;
+				_this.position[_that.obj][1] = _that.y;
+			};
+			monMove.prototype.stop = function(next){
+				var _that = this;
+				
+				clearInterval(_that.timer);
+				var num = jc('#' + _that.obj)._img.src.findNum()[0];
+				var img=new Image();
+		        img.src="img/monster1" + num + ".png";
+		        img.onload=function(){
+		        jc.start('game',true);
+		        jc.image(img,_that.x,_that.y,_this.monster.monDie[num - 1][0],_this.monster.monDie[num - 1][1]).id('die' + _that.obj).level(1);
+		        jc.start('game');}
+
+		        _that.changeO = (function(){
+		        	var changeNum = 2000/30;
+		        	var i = 0;
+		        	_that.timeO = setInterval(function(){
+		        		i = i + 1/changeNum;
+		        		jc('#die' + _that.obj).opacity(1 - i);
+		        		if(i >= 1){
+		        			clearInterval(_that.timeO);
+		        			jc('#die' + _that.obj).del();
+		        		};
+		        	}, 30);
+		        })();
+
+		        jc('#' + _that.obj).del();
+		        _this.monM[_that.obj] = undefined;
+
+		        for(a in _this.monM){	
+		        	if(_this.monM[a]){
+		        		return false;
+		        	}
+		        };
+		        if(next){
+
+		        }else{
+		        	_this.passNum++;
+		        	_this.next();
+		        	_this.score++;
+					s('score').innerHTML = 'X' + _this.score;
+		        }
+		        
+			};
+			_this.next = function(){
+				var _this = this;
+				var t = _this.time[0];
+				clearInterval(_this.timeDown);
+				clearTimeout(_this.timeC);
+				_this.timeDown = setInterval(function(){
+					t--;
+					s('time').innerHTML = t + '秒';
+				}, 1000);
+
+				_this.timeC = setTimeout(function(){
+					clearInterval(_this.timeDown);
+					for(a in _this.monM){
+						try{
+							_this.monM[a].stop(true);
+						}catch(err){
+							console.log(err.message);
+						}
+					};
+					if(_this.score<1){
+						alert("你太逊了");
+					}else{
+						alert("恭喜你消灭了" + _this.score + "只怪物");
+					}
+				}, _this.time[0]*1000);
+
+				_this.monM = {};
+				_this.position = {};
+				var i = 0;
+				createMonster();
+				function createMonster(){
+					if(i<_this.arrNum[_this.passNum]){
+						setTimeout(function(){
+							var mon = random({min:1,max:4});
+							var R = random({min:200,max:300});
+							var angChange = random({min:3,max:6});
+							_this.monster["mon" + mon]({canvas:"game",id:'mon'+ i + _this.passNum});
+							_this.monM['mon'+ i + _this.passNum] = new monMove({obj : 'mon'+ i + _this.passNum,R:R,angChange:angChange});
+							i++;
+							createMonster();
+						}, 200);
+							
+					};
+				};	
+			};
+		}
+		gamePage.prototype.bindEvent = function(){
+			var _this = this;
+			bind(document,'touchstart',function(ev){
+				var ev = event || ev;
+				var touch = ev.changedTouches[0];
+				var touchX = touch.pageX;
+				var touchY = touch.pageY;
+				for(var a in _this.position){
+					if(touchX>_this.position[a][0] && _this.position[a][0]+110 && touchY>_this.position[a][1] && touchY<_this.position[a][1]+110){
+						_this.monM[a].stop();
+						return false;
+					};
+				};
+				shake();
+				function shake(){
+					addClass(document.body,'shake');
+					setTimeout(function(){
+						removeClass(document.body,'shake');
+					}, 1000);
+				}
+			});
+		};
+		var page = new gamePage();
+
+		page.bindEvent();
+		page.next();
+	</script>
+</body>
+</html>
